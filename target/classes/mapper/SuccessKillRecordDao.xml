@@ -3,11 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zyh.seckill2.dao.SuccessKillRecordDao">
+    <!--传入对象参数-->
     <insert id="inserSuccessKillRecord" parameterType="SuccessKillRecord">
-        INSERT  INTO success_kill_record(phone,goods_id,state,kill_time)
+        INSERT ignore INTO success_kill_record(phone,goods_id,state,kill_time)
         VALUES (#{successKillRecord.phone},#{successKillRecord.goodsId},#{successKillRecord.state},#{successKillRecord.killTime});
     </insert>
     <select id="getSuccessKillRecord" resultType="SuccessKillRecord">
+/*嵌套对象*/
         SELECT
         sk.phone,
         sk.goods_id,
@@ -26,8 +28,38 @@
         AND sk.goods_id=#{goodsId};
     </select>
     <select id="getMySuccessKillRecords" resultType="SuccessKillRecord">
-        SELECT phone,goods_id,state,kill_time
-        FROM success_kill_record
-        WHERE phone=#{userPhone};
+        SELECT
+        sk.phone,
+        sk.goods_id,
+        sk.state,
+        sk.kill_time,
+        kg.id "killGoods.id",
+        kg.price "killGoods.price",
+        kg.total_num  "killGoods.totalNum",
+        kg.goods_name "killGoods.goodsName",
+        kg.start_time  "killGoods.startTime",
+        kg.end_time  "killGoods.endTime",
+        kg.create_time "killGoods.createTime"
+        FROM success_kill_record sk
+        INNER JOIN kill_goods kg on kg.id=sk.goods_id
+        WHERE sk.phone=#{userPhone};
+    </select>
+    <select id="getSuccessKillRecords" resultType="SuccessKillRecord">
+        SELECT
+        sk.phone,
+        sk.goods_id,
+        sk.state,
+        sk.kill_time,
+        kg.id "killGoods.id",
+        kg.price "killGoods.price",
+        kg.total_num  "killGoods.totalNum",
+        kg.goods_name "killGoods.goodsName",
+        kg.start_time  "killGoods.startTime",
+        kg.end_time  "killGoods.endTime",
+        kg.create_time "killGoods.createTime"
+        FROM success_kill_record sk
+        INNER JOIN kill_goods kg on kg.id=sk.goods_id
+        WHERE kg.id=#{goodsId}
+        limit #{begin},#{end};
     </select>
 </mapper>

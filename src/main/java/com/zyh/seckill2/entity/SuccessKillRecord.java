@@ -19,6 +19,12 @@ public class SuccessKillRecord {
         this.killTime = killTime;
     }
 
+    public SuccessKillRecord(int goodsId, long phone, Date killTime) {
+        this.goodsId = goodsId;
+        this.phone = phone;
+        this.killTime = killTime;
+    }
+
     public long getPhone() {
         return phone;
     }

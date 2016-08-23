@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyh.seckill2.dao.KillGoodsDao">
+    <update id="reduceNum">
+        UPDATE kill_goods SET
+          total_num=total_num-1
+          WHERE total_num>0
+          AND start_time <![CDATA[<=]]> #{currentTime}
+          AND id=#{id}
+          AND end_time>#{currentTime};
+    </update>
+    <select id="getKillGoodsById" resultType="KillGoods">
+        select id,price,total_num,goods_name,start_time,end_time,create_time
+        FROM kill_goods
+        where id=#{id}
+    </select>
+    <select id="getAllKillGoods" resultType="KillGoods">
+        SELECT id,price,total_num,goods_name,start_time,end_time,create_time
+        FROM kill_goods
+        ORDER BY create_time
+        limit #{start},#{end};
+    </select>
+</mapper>
